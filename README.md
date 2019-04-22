@@ -14,7 +14,7 @@ You can [find the demo here](https://youtu.be/kBw-xGEIYhY)
 
 ## Requirements
 
-This project uses python 3.5 and the PIP following packages:
+This project uses [python 3.5](https://www.python.org/downloads/release/python-350/) and the PIP following packages:
 * opencv
 * tensorflow
 * matplotlib
@@ -35,14 +35,7 @@ pip3 install -r requirements.txt
 
 To train the model, use the following command (see framework github link for more command options):
 ```
-python3 train.py \
-  --bottleneck_dir=logs/bottlenecks \
-  --how_many_training_steps=2000 \
-  --model_dir=inception \
-  --summaries_dir=logs/training_summaries/basic \
-  --output_graph=logs/trained_graph.pb \
-  --output_labels=logs/trained_labels.txt \
-  --image_dir=./dataset
+python train.py  --bottleneck_dir=logs/bottlenecks --how_many_training_steps=2000 --model_dir=inception --summaries_dir=logs/training_summaries/basic --output_graph=logs/trained_graph.pb --output_labels=logs/trained_labels.txt --image_dir=./dataset
 ```
 If you're using the provided dataset, it may take up to three hours.
   
@@ -50,13 +43,13 @@ If you're using the provided dataset, it may take up to three hours.
   
 To test classification, use the following command:
 ```
-python3 classify.py path/to/image.jpg
+python classify.py path/to/image.jpg
 ```
 
 ## Using webcam (demo)
 
 To use webcam, use the following command:
 ```
-python3 classify_webcam.py
+python classify_webcam.py
 ```
 Your hand must be inside the rectangle. Keep position to write word, see demo for deletions.
