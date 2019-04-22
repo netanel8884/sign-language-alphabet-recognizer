@@ -20,13 +20,8 @@ This project uses [python 3.5](https://www.python.org/downloads/release/python-3
 * matplotlib
 * numpy
 
-See requirements.txt and Dockerfile for versions and required APT packages
+See requirements.txt for versions and required APT packages
 
-### Using Docker
-```
-docker build -t hands-classifier .
-docker run -it hands-classifier bash
-```
 ### Install using PIP
 ```
 pip3 install -r requirements.txt
