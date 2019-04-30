@@ -24,7 +24,7 @@ See requirements.txt for versions and required APT packages
 
 ### Install using PIP
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 ## Training
 
