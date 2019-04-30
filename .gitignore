@@ -72,6 +72,7 @@ target/
 
 # pyenv
 .python-version
+.idea
 
 # celery beat schedule file
 celerybeat-schedule
@@ -99,3 +100,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+Interpreter
+
+inception

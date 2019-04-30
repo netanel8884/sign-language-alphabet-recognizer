@@ -6,10 +6,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import cv2
+from PIL import ImageFont, ImageDraw, Image
 
 # Disable tensorflow compilation warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import tensorflow as tf
+
+def reverse(s):
+    """Return a reversed copy of `s`"""
+    return s[::-1]
+
+def heb(eng):
+    eng = eng.replace("B", "ב");
+    eng = eng.replace("A", "א");
+    return eng;
 
 def predict(image_data):
 
@@ -38,6 +48,14 @@ with tf.gfile.FastGFile("logs/output_graph.pb", 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
     _ = tf.import_graph_def(graph_def, name='')
+
+## Make canvas and set the color
+img_sequence = np.zeros((200,400,3),np.uint8)
+b,g,r,a = 0,255,0,0
+
+fontpath = "./font.ttf"
+font = ImageFont.truetype(fontpath, 32)
+
 
 with tf.Session() as sess:
     # Feed the image_data as input to the graph and get first prediction
@@ -76,11 +94,11 @@ with tf.Session() as sess:
                     consecutive = 0
                 if consecutive == 2 and res not in ['nothing']:
                     if res == 'space':
-                        sequence += ' '
+                        sequence = ' ' + sequence;
                     elif res == 'del':
-                        sequence = sequence[:-1]
+                        sequence = sequence[1:]
                     else:
-                        sequence += res
+                        sequence = res + sequence;
                     consecutive = 0
             i += 1
             cv2.putText(img, '%s' % (res.upper()), (100,400), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 4)
@@ -88,9 +106,18 @@ with tf.Session() as sess:
             mem = res
             cv2.rectangle(img, (x1, y1), (x2, y2), (255,0,0), 2)
             cv2.imshow("img", img)
-            img_sequence = np.zeros((200,1200,3), np.uint8)
-            cv2.putText(img_sequence, '%s' % (sequence.upper()), (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+
+
+            img_pil = Image.fromarray(img_sequence)
+            draw = ImageDraw.Draw(img_pil)
+            draw.text((30, 30), (heb(sequence.upper())), font=font, fill=(b, g, r, a))
+            img_sequence = np.array(img_pil)
+
             cv2.imshow('sequence', img_sequence)
+
+            #img_sequence = np.zeros((200, 1200, 3), np.uint8)
+            #cv2.putText(img_sequence, '%s' % (heb(sequence.upper())), (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+            #
             
             if a == 27: # when `esc` is pressed
                 break
@@ -98,3 +125,4 @@ with tf.Session() as sess:
 # Following line should... <-- This should work fine now
 cv2.destroyAllWindows() 
 cv2.VideoCapture(0).release()
+
